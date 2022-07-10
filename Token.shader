@@ -1841,15 +1841,16 @@ Shader ".poiyomi/User Modules/token"
 		//Third party
 		[HideInInspector] m_thirdpartyCategory ("Third Party", Float) = 0
 		
-		[HideInInspector] m_start_tokenEmission ("Token Emissions--{reference_property:_TokenEmissionEnable}", Float) = 0
-		[HideInInspector][ThryToggle(_TOKEN_EMISSION)] _TokenEmissionEnable ("Enabled?", Float) = 1
+		// [HideInInspector] m_start_tokenEmission ("Token Emissions--{reference_property:_TokenEmissionEnable}", Float) = 0
+		// [HideInInspector][ThryToggle(_TOKEN_EMISSION)] _TokenEmissionEnable ("Enabled?", Float) = 1
+		[HideInInspector] m_start_tokenEmission ("Token Emissions", Float) = 0
 		[Helpbox(1)] _TokenEmissionHelp("This section has controls for a modified emission system.", Int) = 0
 		
-		[HideInInspector] g_start_tokenEmission ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmissionEnable}}", Float) = 0
+		[HideInInspector] g_start_tokenEmission ("", Float) = 0
 		
 		[HideInInspector] m_start_tokenEmission0 ("Emission 0--{reference_property:_TokenEmission0Enable}", Float) = 0
 		[HideInInspector][ThryToggle(_TOKEN_EMISSION0)] _TokenEmission0Enable ("Enabled?", Float) = 1
-		[HideInInspector] g_start_tokenEmission0 ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0Enable}}", Float) = 0
+		[HideInInspector] g_start_tokenEmission0 ("", Float) = 0
 		
 		_TokenEmission0Mask ("Emission Mask--{reference_properties:[_TokenEmission0MaskPan, _TokenEmission0MaskUV, _TokenEmission0MaskInvert]}", 2D) = "white" { }
 		[HideInInspector][Vector2]_TokenEmission0MaskPan ("Panning", Vector) = (0, 0, 0, 0)
@@ -1882,7 +1883,27 @@ Shader ".poiyomi/User Modules/token"
 		[HideInInspector] g_end_tokenEmission0ColorShiftOptions ("", Float) = 0
 		
 		[ThryToggle(true)] _TokenEmission0AudioLinkEnabled ("Audio Link--{ condition_showS:_EnableAudioLink==1}", Float) = 0
-		[Enum(Bass,0,Low,1,Mid,2,Trebble,3)]_TokenEmission0ALBand ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
+		[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBand ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
+		
+		[HideInInspector] g_start_tokenEmission0ALBandMap ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0ALBand==4}}", Float) = 0
+		
+		_TokenEmission0BandMap ("Band Map--{reference_properties:[_TokenEmission0BandMapPan, _TokenEmission0BandMapUV]}", 2D) = "white" {}
+		[HideInInspector][Vector2]_TokenEmission0BandMapPan ("Panning", Vector) = (0, 0, 0, 0)
+		[HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0BandMapUV ("UV", Int) = 0
+		
+		_TokenEmission0BandColorBass ("Bass Color--{reference_property:_TokenEmission0BandColorThemeIndexBass}", Color) = (1, 1, 1, 1)
+		[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexBass ("", Int) = 0
+		
+		_TokenEmission0BandColorLow ("Low Color--{reference_property:_TokenEmission0BandColorThemeIndexLow}", Color) = (1, 1, 1, 1)
+		[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexLow ("", Int) = 0
+		
+		_TokenEmission0BandColorHigh ("High Color--{reference_property:_TokenEmission0BandColorThemeIndexHigh}", Color) = (1, 1, 1, 1)
+		[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexHigh ("", Int) = 0
+		
+		_TokenEmission0BandColorTreble ("Treble Color--{reference_property:_TokenEmission0BandColorThemeIndexTreble}", Color) = (1, 1, 1, 1)
+		[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexTreble ("", Int) = 0
+		
+		[HideInInspector] g_end_tokenEmission0ALBandMap ("", Float) = 0
 		
 		[HideInInspector] g_end_tokenEmission0 ("", Float) = 0
 		[HideInInspector] m_end_tokenEmission0 ("", Float) = 0
@@ -2090,7 +2111,7 @@ Shader ".poiyomi/User Modules/token"
 			#pragma shader_feature TPS_Penetrator
 			#pragma shader_feature TPS_IsSkinnedMesh
 			
-			#pragma shader_feature _TOKEN_EMISSION
+			// #pragma shader_feature _TOKEN_EMISSION
 			#pragma shader_feature _TOKEN_EMISSION0
 			
 			#pragma multi_compile_fwdbase
@@ -4356,7 +4377,7 @@ Shader ".poiyomi/User Modules/token"
 			float2 Pan;
 			float UV;
 			*/
-			#ifdef _TOKEN_EMISSION
+			// #ifdef _TOKEN_EMISSION
 			#ifdef _TOKEN_EMISSION0
 			#if defined(PROP_TokenEmission0Mask) || !defined(OPTIMIZER_ENABLED)
 			sampler2D _TokenEmission0Mask;
@@ -4377,7 +4398,7 @@ Shader ".poiyomi/User Modules/token"
 			float _TokenEmission0DelayMapInvert;
 			
 			float _TokenEmission0AudioLinkEnabled;
-			int _TokenEmission0ALBand;
+			float _TokenEmission0ALBand;
 			
 			float4 _TokenEmission0Color;
 			float _TokenEmission0ColorThemeIndex;
@@ -4401,8 +4422,27 @@ Shader ".poiyomi/User Modules/token"
 			float2 _TokenEmission0ColorShiftGradientPan;
 			float _TokenEmission0ColorShiftGradientUV;
 			
+			#if defined(PROP_TokenEmission0BandMap) || !defined(OPTIMIZER_ENABLED)
+			sampler2D _TokenEmission0BandMap;
 			#endif
+			float4 _TokenEmission0BandMap_ST;
+			float2 _TokenEmission0BandMapPan;
+			float _TokenEmission0BandMapUV;
+			
+			float4 _TokenEmission0BandColorBass;
+			float _TokenEmission0BandColorThemeIndexBass;
+			
+			float4 _TokenEmission0BandColorLow;
+			float _TokenEmission0BandColorThemeIndexLow;
+			
+			float4 _TokenEmission0BandColorHigh;
+			float _TokenEmission0BandColorThemeIndexHigh;
+			
+			float4 _TokenEmission0BandColorTreble;
+			float _TokenEmission0BandColorThemeIndexTreble;
+			
 			#endif
+			// #endif
 			
 			//Structs
 			struct appdata
@@ -4559,6 +4599,13 @@ Shader ".poiyomi/User Modules/token"
 				float3 finalColor;
 				float alpha;
 				float3 emission;
+			};
+			
+			struct TokenEmissionALData {
+				float3 bassColor;
+				float3 lowColor;
+				float3 highColor;
+				float3 trebleColor;
 			};
 			
 			float2 poiUV(float2 uv, float4 tex_st)
@@ -10856,6 +10903,7 @@ Shader ".poiyomi/User Modules/token"
 			}
 			
 			#ifdef _TOKEN_EMISSION0
+			
 			float3 applyTokenEmission0(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiLight poiLight, in PoiCam poiCam, in PoiMods poiMods)
 			{
 				float3 emission = 0;
@@ -10871,10 +10919,26 @@ Shader ".poiyomi/User Modules/token"
 				}
 				
 				// brightness source
-				float brightness = AudioLinkData(float2(delay, band)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
+				// TODO revert to band
+				float brightness = AudioLinkData(float2(delay, 0)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
 				
 				// color source
-				float3 color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				float3 color = 0;
+				if (band == 4)
+				{
+					float2 uv_BandMap = poiMesh.uv[0].xy * _TokenEmission0BandMap_ST.xy + _TokenEmission0BandMap_ST.zw;
+					float4 bandMap = tex2D(_TokenEmission0BandMap, uv_BandMap);
+					
+					float3 bassColor = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass);
+					float3 lowColor = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow);
+					float3 highColor = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh);
+					float3 trebbleColor = poiThemeColor(poiMods, _TokenEmission0BandColorTreble.rgb, _TokenEmission0BandColorThemeIndexTreble);
+					
+					color = bassColor;
+					
+				} else {
+					color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				}
 				
 				// color shift
 				if (_TokenEmission0EnableColorShift) {
@@ -11811,7 +11875,7 @@ Shader ".poiyomi/User Modules/token"
 			#pragma shader_feature TPS_Penetrator
 			#pragma shader_feature TPS_IsSkinnedMesh
 			
-			#pragma shader_feature _TOKEN_EMISSION
+			// #pragma shader_feature _TOKEN_EMISSION
 			#pragma shader_feature _TOKEN_EMISSION0
 			
 			#pragma multi_compile_fwdadd_fullshadows
@@ -13831,7 +13895,7 @@ Shader ".poiyomi/User Modules/token"
 			float2 Pan;
 			float UV;
 			*/
-			#ifdef _TOKEN_EMISSION
+			// #ifdef _TOKEN_EMISSION
 			#ifdef _TOKEN_EMISSION0
 			#if defined(PROP_TokenEmission0Mask) || !defined(OPTIMIZER_ENABLED)
 			sampler2D _TokenEmission0Mask;
@@ -13852,7 +13916,7 @@ Shader ".poiyomi/User Modules/token"
 			float _TokenEmission0DelayMapInvert;
 			
 			float _TokenEmission0AudioLinkEnabled;
-			int _TokenEmission0ALBand;
+			float _TokenEmission0ALBand;
 			
 			float4 _TokenEmission0Color;
 			float _TokenEmission0ColorThemeIndex;
@@ -13876,8 +13940,27 @@ Shader ".poiyomi/User Modules/token"
 			float2 _TokenEmission0ColorShiftGradientPan;
 			float _TokenEmission0ColorShiftGradientUV;
 			
+			#if defined(PROP_TokenEmission0BandMap) || !defined(OPTIMIZER_ENABLED)
+			sampler2D _TokenEmission0BandMap;
 			#endif
+			float4 _TokenEmission0BandMap_ST;
+			float2 _TokenEmission0BandMapPan;
+			float _TokenEmission0BandMapUV;
+			
+			float4 _TokenEmission0BandColorBass;
+			float _TokenEmission0BandColorThemeIndexBass;
+			
+			float4 _TokenEmission0BandColorLow;
+			float _TokenEmission0BandColorThemeIndexLow;
+			
+			float4 _TokenEmission0BandColorHigh;
+			float _TokenEmission0BandColorThemeIndexHigh;
+			
+			float4 _TokenEmission0BandColorTreble;
+			float _TokenEmission0BandColorThemeIndexTreble;
+			
 			#endif
+			// #endif
 			
 			//Structs
 			struct appdata
@@ -14034,6 +14117,13 @@ Shader ".poiyomi/User Modules/token"
 				float3 finalColor;
 				float alpha;
 				float3 emission;
+			};
+			
+			struct TokenEmissionALData {
+				float3 bassColor;
+				float3 lowColor;
+				float3 highColor;
+				float3 trebleColor;
 			};
 			
 			float2 poiUV(float2 uv, float4 tex_st)
@@ -19940,6 +20030,7 @@ Shader ".poiyomi/User Modules/token"
 			}
 			
 			#ifdef _TOKEN_EMISSION0
+			
 			float3 applyTokenEmission0(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiLight poiLight, in PoiCam poiCam, in PoiMods poiMods)
 			{
 				float3 emission = 0;
@@ -19955,10 +20046,26 @@ Shader ".poiyomi/User Modules/token"
 				}
 				
 				// brightness source
-				float brightness = AudioLinkData(float2(delay, band)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
+				// TODO revert to band
+				float brightness = AudioLinkData(float2(delay, 0)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
 				
 				// color source
-				float3 color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				float3 color = 0;
+				if (band == 4)
+				{
+					float2 uv_BandMap = poiMesh.uv[0].xy * _TokenEmission0BandMap_ST.xy + _TokenEmission0BandMap_ST.zw;
+					float4 bandMap = tex2D(_TokenEmission0BandMap, uv_BandMap);
+					
+					float3 bassColor = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass);
+					float3 lowColor = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow);
+					float3 highColor = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh);
+					float3 trebbleColor = poiThemeColor(poiMods, _TokenEmission0BandColorTreble.rgb, _TokenEmission0BandColorThemeIndexTreble);
+					
+					color = bassColor;
+					
+				} else {
+					color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				}
 				
 				// color shift
 				if (_TokenEmission0EnableColorShift) {
@@ -20864,7 +20971,7 @@ Shader ".poiyomi/User Modules/token"
 			#pragma shader_feature TPS_Penetrator
 			#pragma shader_feature TPS_IsSkinnedMesh
 			
-			#pragma shader_feature _TOKEN_EMISSION
+			// #pragma shader_feature _TOKEN_EMISSION
 			#pragma shader_feature _TOKEN_EMISSION0
 			
 			#pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2
@@ -21624,7 +21731,7 @@ Shader ".poiyomi/User Modules/token"
 			float2 Pan;
 			float UV;
 			*/
-			#ifdef _TOKEN_EMISSION
+			// #ifdef _TOKEN_EMISSION
 			#ifdef _TOKEN_EMISSION0
 			#if defined(PROP_TokenEmission0Mask) || !defined(OPTIMIZER_ENABLED)
 			sampler2D _TokenEmission0Mask;
@@ -21645,7 +21752,7 @@ Shader ".poiyomi/User Modules/token"
 			float _TokenEmission0DelayMapInvert;
 			
 			float _TokenEmission0AudioLinkEnabled;
-			int _TokenEmission0ALBand;
+			float _TokenEmission0ALBand;
 			
 			float4 _TokenEmission0Color;
 			float _TokenEmission0ColorThemeIndex;
@@ -21669,8 +21776,27 @@ Shader ".poiyomi/User Modules/token"
 			float2 _TokenEmission0ColorShiftGradientPan;
 			float _TokenEmission0ColorShiftGradientUV;
 			
+			#if defined(PROP_TokenEmission0BandMap) || !defined(OPTIMIZER_ENABLED)
+			sampler2D _TokenEmission0BandMap;
 			#endif
+			float4 _TokenEmission0BandMap_ST;
+			float2 _TokenEmission0BandMapPan;
+			float _TokenEmission0BandMapUV;
+			
+			float4 _TokenEmission0BandColorBass;
+			float _TokenEmission0BandColorThemeIndexBass;
+			
+			float4 _TokenEmission0BandColorLow;
+			float _TokenEmission0BandColorThemeIndexLow;
+			
+			float4 _TokenEmission0BandColorHigh;
+			float _TokenEmission0BandColorThemeIndexHigh;
+			
+			float4 _TokenEmission0BandColorTreble;
+			float _TokenEmission0BandColorThemeIndexTreble;
+			
 			#endif
+			// #endif
 			
 			//Structs
 			struct appdata
@@ -21827,6 +21953,13 @@ Shader ".poiyomi/User Modules/token"
 				float3 finalColor;
 				float alpha;
 				float3 emission;
+			};
+			
+			struct TokenEmissionALData {
+				float3 bassColor;
+				float3 lowColor;
+				float3 highColor;
+				float3 trebleColor;
 			};
 			
 			float2 poiUV(float2 uv, float4 tex_st)
@@ -24709,6 +24842,7 @@ Shader ".poiyomi/User Modules/token"
 			}
 			
 			#ifdef _TOKEN_EMISSION0
+			
 			float3 applyTokenEmission0(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiLight poiLight, in PoiCam poiCam, in PoiMods poiMods)
 			{
 				float3 emission = 0;
@@ -24724,10 +24858,26 @@ Shader ".poiyomi/User Modules/token"
 				}
 				
 				// brightness source
-				float brightness = AudioLinkData(float2(delay, band)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
+				// TODO revert to band
+				float brightness = AudioLinkData(float2(delay, 0)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
 				
 				// color source
-				float3 color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				float3 color = 0;
+				if (band == 4)
+				{
+					float2 uv_BandMap = poiMesh.uv[0].xy * _TokenEmission0BandMap_ST.xy + _TokenEmission0BandMap_ST.zw;
+					float4 bandMap = tex2D(_TokenEmission0BandMap, uv_BandMap);
+					
+					float3 bassColor = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass);
+					float3 lowColor = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow);
+					float3 highColor = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh);
+					float3 trebbleColor = poiThemeColor(poiMods, _TokenEmission0BandColorTreble.rgb, _TokenEmission0BandColorThemeIndexTreble);
+					
+					color = bassColor;
+					
+				} else {
+					color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
+				}
 				
 				// color shift
 				if (_TokenEmission0EnableColorShift) {
