@@ -44,6 +44,16 @@ MonoBehaviour:
     - OUTLINE_PROPERTY_VARIABLES
     NeedsVariant: 0
     Queue: 100
+  - Template: {fileID: 7261006555472478149, guid: 65dea431ec5955448a4f812fe18bfa5e,
+      type: 3}
+    Keywords:
+    - VERTEX_BASE_DATA_STRUCTURES
+    - VERTEX_ADD_DATA_STRUCTURES
+    - VERTEX_SHADOW_DATA_STRUCTURES
+    - VERTEX_OUTLINE_DATA_STRUCTURES
+    - VERTEX_META_DATA_STRUCTURES
+    NeedsVariant: 0
+    Queue: 100
   - Template: {fileID: 4466468597966175403, guid: 65dea431ec5955448a4f812fe18bfa5e,
       type: 3}
     Keywords:
