@@ -26,6 +26,7 @@ _TokenEmission0DelayMap ("Delay Map--{reference_properties:[_TokenEmission0Delay
 
 
 [HideInInspector] m_start_tokenEmission0ColorSource("Color Source", Int) = 0
+// source selection
 [Enum(User Defined, 0, Gradient, 1)]_TokenEmission0ColorSourceNoAL ("Color Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==0},on_value_actions:[
 {value:0,actions:[{type:SET_PROPERTY,data:_TokenEmission0ColorSource=1}]},
 {value:1,actions:[{type:SET_PROPERTY,data:_TokenEmission0ColorSource=0}]}
@@ -36,40 +37,33 @@ _TokenEmission0DelayMap ("Delay Map--{reference_properties:[_TokenEmission0Delay
 {value:2,actions:[{type:SET_PROPERTY,data:_TokenEmission0ColorSource=2}]}
 ]}", Int) = 0 // AudioLink enabled
 
+// [HideInInspector]_TokenEmission0ColorSource("Selected Color Source", Int) = 0
 _TokenEmission0ColorSource("Selected Color Source", Int) = 0
 
-[HideInInspector] g_start_tokenEmission0UserDefinedColor("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0ColorSource==0}}", Float) = 0
-
-_TokenEmission0Color ("Emission Color--{reference_property:_TokenEmission0ColorThemeIndex}", Color) = (1, 1, 1, 1)
-[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12, Color Shift, 13)] _TokenEmission0ColorThemeIndex ("", Int) = 0
-
-[HideInInspector] g_end_tokenEmission0UserDefinedColor("", Float) = 0
-
+// color gradient
 [HideInInspector] g_start_tokenEmission0ColorGradientOptions ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0ColorSource==1}}", Float) = 0
 
 _TokenEmission0ColorGradientMap("Color Gradient Map--{ reference_properties:[_TokenEmission0ColorGradientMapPan, _TokenEmission0ColorGradientMapUV]}", 2D)= "white" { }
 [HideInInspector][Vector2]_TokenEmission0ColorGradientMapPan ("Panning", Vector) = (0, 0, 0, 0)
 [HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0ColorGradientMapUV ("UV", Int) = 0
 
-[Space(2)]
-// _TokenEmission0ColorShiftAmounts ("Shift Amounts", Color) = (1, 1, 1)
 [Gradient]_TokenEmission0ColorGradient("Gradient--{reference_properties:[_TokenEmission0ColorGradientPan, _TokenEmission0ColorGradientUV]}", 2D)= "white" { }
 [HideInInspector][Vector2]_TokenEmission0ColorGradientPan ("Panning", Vector) = (0, 0, 0, 0)
 [HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0ColorGradientUV ("UV", Int) = 0
 
 [HideInInspector] g_end_tokenEmission0ColorGradientOptions ("", Float) = 0
 
-[HideInInspector] m_end_tokenEmission0ColorSource("", Int) = 0
+// AudioLink
+[HideInInspector] g_start_tokenEmission0ColorAudioLinkSettings ("--{condition_showS:(_TokenEmission0ColorSource==2)}", Float) = 0
 
-// [ThryToggle(_TOKEN_EMISSION0AUDIOLINK)] _TokenEmission0AudioLinkEnabled ("Audio Link--{ condition_showS:_EnableAudioLink==1}", Float) = 0
-[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBand ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
+[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBandColor ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
 
-// [HideInInspector] g_start_tokenEmission0ALBandMap ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==1&&_TokenEmission0ALBand==4}}", Float) = 0
-[HideInInspector] g_start_tokenEmission0ALBandMap ("--{condition_showS:(_TokenEmission0AudioLinkEnabled==1 && _TokenEmission0ALBand==4)}", Float) = 0
+// [HideInInspector] g_start_TokenEmission0ALBandColorMap ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==1&&_TokenEmission0ALBandColor==4}}", Float) = 0
+[HideInInspector] g_start_TokenEmission0ALBandColorMap ("--{condition_showS:(_TokenEmission0AudioLinkEnabled==1 && _TokenEmission0ALBandColor==4)}", Float) = 0
 
-_TokenEmission0BandMap ("Band Map--{reference_properties:[_TokenEmission0BandMapPan, _TokenEmission0BandMapUV]}", 2D) = "white" {}
-[HideInInspector][Vector2]_TokenEmission0BandMapPan ("Panning", Vector) = (0, 0, 0, 0)
-[HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0BandMapUV ("UV", Int) = 0
+_TokenEmission0BandColorMap ("Band Map--{reference_properties:[_TokenEmission0BandColorMapPan, _TokenEmission0BandColorMapUV]}", 2D) = "white" {}
+[HideInInspector][Vector2]_TokenEmission0BandColorMapPan ("Panning", Vector) = (0, 0, 0, 0)
+[HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0BandColorMapUV ("UV", Int) = 0
 
 _TokenEmission0BandColorBass ("Bass Color--{reference_property:_TokenEmission0BandColorThemeIndexBass}", Color) = (1, 1, 1, 1)
 [HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexBass ("", Int) = 0
@@ -83,8 +77,57 @@ _TokenEmission0BandColorHigh ("High Color--{reference_property:_TokenEmission0Ba
 _TokenEmission0BandColorTreble ("Treble Color--{reference_property:_TokenEmission0BandColorThemeIndexTreble}", Color) = (1, 1, 1, 1)
 [HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12)] _TokenEmission0BandColorThemeIndexTreble ("", Int) = 0
 
+[HideInInspector] g_end_TokenEmission0ALBandColorMap ("", Float) = 0
+[HideInInspector] g_end_tokenEmission0ColorAudioLinkSettings ("", Float) = 0
 
-[HideInInspector] g_end_tokenEmission0ALBandMap ("", Float) = 0
+[HideInInspector] g_start_tokenEmission0UserDefinedColor("--{condition_showS:(_TokenEmission0ColorSource==0 || (_TokenEmission0ColorSource==2 && _TokenEmission0ALBandColor!=4))}", Float) = 0
+
+_TokenEmission0Color ("Emission Color--{reference_property:_TokenEmission0ColorThemeIndex}", Color) = (1, 1, 1, 1)
+[HideInInspector][ThryWideEnum(Off, 0, Theme Color 0, 1, Theme Color 1, 2, Theme Color 2, 3, Theme Color 3, 4, ColorChord 0, 5, ColorChord 1, 6, ColorChord 2, 7, ColorChord 3, 8, AL Theme 0, 9, AL Theme 1, 10, AL Theme 2, 11, AL Theme 3, 12, Color Shift, 13)] _TokenEmission0ColorThemeIndex ("", Int) = 0
+
+[HideInInspector] g_end_tokenEmission0UserDefinedColor("", Float) = 0
+
+[HideInInspector] m_end_tokenEmission0ColorSource("", Int) = 0
+
+[HideInInspector] m_start_tokenEmission0StrengthSource("Strength Source", Float) = 0
+// source selection
+[Enum(User Defined, 0, Gradient, 1)]_TokenEmission0StrengthSourceNoAL ("Color Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==0},on_value_actions:[
+{value:0,actions:[{type:SET_PROPERTY,data:_TokenEmission0StrengthSource=1}]},
+{value:1,actions:[{type:SET_PROPERTY,data:_TokenEmission0StrengthSource=0}]}
+]}", Int) = 0 // AudioLink disabled
+[Enum(User Defined, 0, Gradient, 1, AudioLink, 2)]_TokenEmission0StrengthSourceAL ("Color Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==1},on_value_actions:[
+{value:0,actions:[{type:SET_PROPERTY,data:_TokenEmission0StrengthSource=0}]},
+{value:1,actions:[{type:SET_PROPERTY,data:_TokenEmission0StrengthSource=1}]},
+{value:2,actions:[{type:SET_PROPERTY,data:_TokenEmission0StrengthSource=2}]}
+]}", Int) = 0 // AudioLink enabled
+
+_TokenEmission0StrengthSource("Selected Strength Source", Int) = 0
+
+// strength curve
+[HideInInspector] g_start_tokenEmission0StrengthCurveOptions("--{condition_showS:(_TokenEmission0StrengthSource==1)}", Float) = 0
+
+_TokenEmission0StrengthCurveMap("Strength Curve Map--{ reference_properties:[_TokenEmission0StrengthCurveMapPan, _TokenEmission0StrengthCurveMapUV]}", 2D)= "white" { }
+[HideInInspector][Vector2]_TokenEmission0StrengthCurveMapPan ("Panning", Vector) = (0, 0, 0, 0)
+[HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0StrengthCurveMapUV ("UV", Int) = 0
+
+[Curve]_TokenEmission0StrengthCurve("Strength Curve", 2D) = "white" {}
+
+[HideInInspector] g_end_tokenEMission0StrengthCurveOptions("", Float) = 0
+
+// AudioLink
+[HideInInspector] g_start_tokenEmission0StrengthAudioLinkSettings("--{condition_showS:(_TokenEmission0StrengthSource==2)}", Float) = 0
+
+[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBandStrength ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
+
+[HideInInspector] g_start_TokenEmission0ALBandStrengthCurve ("--{condition_showS:(_TokenEmission0AudioLinkEnabled==1 && _TokenEmission0ALBandStrength==4)}", Float) = 0
+
+
+[HideInInspector] g_end_TokenEmission0ALBandStrengthCurve ("", Float) = 0
+
+[HideInInspector] g_end_tokenEmission0StrengthAudioLinkSettings("", Float) = 0
+
+
+[HideInInspector] m_end_tokenEmission0StrengthSource("", Float) = 0
 
 [HideInInspector] g_end_tokenEmission0 ("", Float) = 0
 [HideInInspector] m_end_tokenEmission0 ("", Float) = 0
@@ -126,22 +169,22 @@ float UV;
 	float _TokenEmission0DelayMapUV;
 	float _TokenEmission0DelayMapInvert;
 
-	float _TokenEmission0ColorSource;
-
 	float _TokenEmission0AudioLinkEnabled;
-	float _TokenEmission0ALBand;
+	float _TokenEmission0ALBandColor;
+	
+	float _TokenEmission0ColorSource;
 
 	float4 _TokenEmission0Color;
 	float _TokenEmission0ColorThemeIndex;
 
-	#if defined(PROP_TokenEmission0ColorGradientMap) || !defined(OPTIMIZER_ENABLED)
+	#if defined(PROP_TOKENEMISSION0COLORGRADIENTMAP) || !defined(OPTIMIZER_ENABLED)
 		sampler2D _TokenEmission0ColorGradientMap;
 	#endif
 	float4 _TokenEmission0ColorGradientMap_ST;
 	float2 _TokenEmission0ColorGradientMapPan;
 	float _TokenEmission0ColorGradientMapUV;
 
-	#if defined(PROP_TokenEmission0ColorGradient) || !defined(OPTIMIZER_ENABLED)
+	#if defined(PROP_TOKENEMISSION0COLORGRADIENT) || !defined(OPTIMIZER_ENABLED)
 		sampler2D _TokenEmission0ColorGradient;
 	#endif
 	float4 _TokenEmission0ColorGradient_ST;
@@ -151,12 +194,12 @@ float UV;
 
 	#ifdef _TOKEN_EMISSION0AUDIOLINK
 
-		#if defined(PROP_TOKENEMISSION0BANDMAP) || !defined(OPTIMIZER_ENABLED)
-			sampler2D _TokenEmission0BandMap;
+		#if defined(PROP_TOKENEMISSION0COLORBANDMAP) || !defined(OPTIMIZER_ENABLED)
+			sampler2D _TokenEmission0BandColorMap;
 		#endif
-		float4 _TokenEmission0BandMap_ST;
-		float2 _TokenEmission0BandMapPan;
-		float _TokenEmission0BandMapUV;
+		float4 _TokenEmission0BandColorMap_ST;
+		float2 _TokenEmission0BandColorMapPan;
+		float _TokenEmission0BandColorMapUV;
 
 		float4 _TokenEmission0BandColorBass;
 		float _TokenEmission0BandColorThemeIndexBass;
@@ -233,11 +276,13 @@ struct TokenEmissionALData {
 	#endif
 
 	float3 applyTokenEmission0(inout PoiFragData poiFragData, in PoiMesh poiMesh, in PoiLight poiLight, in PoiCam poiCam, in PoiMods poiMods)
-	{
+{
 		float3 emission = 0;
 		float emissionStrength = _TokenEmission0Strength;
-		int band = _TokenEmission0ALBand;
-  
+		float colorSource = _TokenEmission0ColorSource;
+		int band = _TokenEmission0ALBandColor;
+		
+		// delay mapping
 		float2 uv_DelayMap = poiMesh.uv[0].xy * _TokenEmission0DelayMap_ST.xy + _TokenEmission0DelayMap_ST.zw;
 		float delay = 0;
 		if (_TokenEmission0DelayMapInvert) {
@@ -246,22 +291,31 @@ struct TokenEmissionALData {
 			delay = min( (tex2D(_TokenEmission0DelayMap, uv_DelayMap)).r * ( 128.0 ) , 127.999 );
 		}
 		
-		// brightness source
-		// TODO revert to band
-		// float brightness = AudioLinkData(float2(delay, band)) * poiMods.audioLinkAvailable * _TokenEmission0AudioLinkEnabled;
-		// float brightness = AudioLinkData( ALPASS_GENERALVU + uint2( 8, 0 )).x;
-		
-		
-		
-		// color source
-		float3 color = 0;
-		// float3 color = poiThemeColor(poiMods, _TokenEmission0Color, _TokenEmission0ColorThemeIndex);
-
-		//  audiolink data
-		#ifdef _TOKEN_EMISSION0AUDIOLINK
-
 		TokenEmissionALData emissionData;
 		PoiInitStruct(TokenEmissionALData, emissionData);
+		
+		// color source
+		switch(colorSource)
+		{
+			case 0: // user set
+			{
+				break;
+			}
+			case 1: // gradient
+			{
+				break;
+			}
+			case 2: // AudioLink
+			{
+				break;
+			}
+		}
+		
+		float3 color = 0;
+
+		#ifdef _TOKEN_EMISSION0AUDIOLINK
+
+		
 
 		switch(band)
 		{
@@ -284,12 +338,12 @@ struct TokenEmissionALData {
 			}
 			case 4: // band map
 			{
-				#if defined(PROP_TOKENEMISSION0BANDMAP) || !defined(OPTIMIZER_ENABLED)
+				#if defined(PROP_TokenEmission0BandColorMap) || !defined(OPTIMIZER_ENABLED)
 					tokenEmissionAudioLinkBandBrightness(poiMods, emissionData, delay);
 					tokenEmission0AudioLinkBandColors(poiMods, emissionData);
 
-					float2 uv_BandMap = poiMesh.uv[0].xy * _TokenEmission0BandMap_ST.xy + _TokenEmission0BandMap_ST.zw;
-					float4 bandMap = tex2D(_TokenEmission0BandMap, uv_BandMap);
+					float2 uv_BandMap = poiMesh.uv[0].xy * _TokenEmission0BandColorMap_ST.xy + _TokenEmission0BandColorMap_ST.zw;
+					float4 bandMap = tex2D(_TokenEmission0BandColorMap, uv_BandMap);
 
 					float3 bassFinal = bandMap.r * emissionData.bandBrightness[0] * emissionData.bandColor[0];
 					float3 lowFinal = bandMap.g * emissionData.bandBrightness[1] * emissionData.bandColor[1];
