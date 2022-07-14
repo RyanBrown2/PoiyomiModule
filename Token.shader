@@ -1963,7 +1963,9 @@ Shader ".poiyomi/User Modules/token"
 		
 		[HideInInspector] g_end_tokenEMission0IntensityCurveOptions("", Float) = 0
 		
-		// AudioLink
+		/*
+		Emission 0 - Intensity AudioLink Map
+		*/
 		[HideInInspector] g_start_tokenEmission0IntensityAudioLinkSettings("--{condition_showS:(_TokenEmission0IntensitySource==2)}", Float) = 0
 		
 		[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBandIntensity ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
@@ -1973,11 +1975,6 @@ Shader ".poiyomi/User Modules/token"
 		_TokenEmission0BandIntensityMap ("Band Map--{reference_properties:[_TokenEmission0BandIntensityMapPan, _TokenEmission0BandIntensityMapUV]}", 2D) = "white" {}
 		[HideInInspector][Vector2]_TokenEmission0BandIntensityMapPan ("Panning", Vector) = (0, 0, 0, 0)
 		[HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0BandIntensityMapUV ("UV", Int) = 0
-		
-		// _TokenEmission0BandIntensityBass ("Bass Intensity", Range(0,1)) = 1
-		// _TokenEmission0BandIntensityLow ("Low Intensity", Range(0,1)) = 1
-		// _TokenEmission0BandIntensityHigh ("High Intensity", Range(0,1)) = 1
-		// _TokenEmission0BandIntensityTreble ("Treble Intensity", Range(0,1)) = 1
 		
 		[Curve]_TokenEmission0BandIntensityCurveBass ("Bass Intensity--{reference_properties:[_TokenEmission0BandIntensityCurveBassPan, _TokenEmission0BandIntensityCurveBassUV]}", 2D) = "white" {}
 		[HideInInspector][Vector2]_TokenEmission0BandIntensityCurveBassPan ("Panning", Vector) = (0, 0, 0, 0)
@@ -11175,6 +11172,10 @@ Shader ".poiyomi/User Modules/token"
 							float2 uv_bandMap = poiMesh.uv[0].xy * _TokenEmission0BandColorMap_ST.xy + _TokenEmission0BandColorMap_ST.zw;
 							bandMap = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0BandColorMap, _MainTex, uv_bandMap);
 							#endif
+							
+							float bandMapScalar = 1.0 / (bandMap.r + bandMap.g + bandMap.b + (1.0 - bandMap.a));
+							bandMap *= bandMapScalar;
+							
 							emissionData.bandColor[0] = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass) * bandMap.r;
 							emissionData.bandColor[1] = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow) * bandMap.g;
 							emissionData.bandColor[2] = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh) * bandMap.b;
@@ -11280,12 +11281,12 @@ Shader ".poiyomi/User Modules/token"
 							
 							float trebleCurve = 0;
 							#if defined(PROP_TOKENEMISSION0BANDINTENSITYCURVETREBLE) || !defined(OPTIMIZER_ENABLED)
-							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.a, 1));
+							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.w, 1));
 							#endif
-							// emissionData.bandIntensity[0] *= bassCurve;
-							// emissionData.bandIntensity[1] *= lowCurve;
-							// emissionData.bandIntensity[2] *= highCurve;
-							// emissionData.bandIntensity[3] *= trebleCurve;
+							emissionData.bandIntensity[0] *= bassCurve;
+							emissionData.bandIntensity[1] *= lowCurve;
+							emissionData.bandIntensity[2] *= highCurve;
+							emissionData.bandIntensity[3] *= trebleCurve;
 							emissionData.intensity = ( emissionData.bandIntensity[0] + emissionData.bandIntensity[1] + emissionData.bandIntensity[2] + emissionData.bandIntensity[3]);
 						} else {
 							emissionData.intensity *= AudioLinkData(float2(delay, emissionData.intensityBand)) * poiMods.audioLinkAvailable;
@@ -20594,6 +20595,10 @@ Shader ".poiyomi/User Modules/token"
 							float2 uv_bandMap = poiMesh.uv[0].xy * _TokenEmission0BandColorMap_ST.xy + _TokenEmission0BandColorMap_ST.zw;
 							bandMap = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0BandColorMap, _MainTex, uv_bandMap);
 							#endif
+							
+							float bandMapScalar = 1.0 / (bandMap.r + bandMap.g + bandMap.b + (1.0 - bandMap.a));
+							bandMap *= bandMapScalar;
+							
 							emissionData.bandColor[0] = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass) * bandMap.r;
 							emissionData.bandColor[1] = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow) * bandMap.g;
 							emissionData.bandColor[2] = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh) * bandMap.b;
@@ -20699,12 +20704,12 @@ Shader ".poiyomi/User Modules/token"
 							
 							float trebleCurve = 0;
 							#if defined(PROP_TOKENEMISSION0BANDINTENSITYCURVETREBLE) || !defined(OPTIMIZER_ENABLED)
-							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.a, 1));
+							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.w, 1));
 							#endif
-							// emissionData.bandIntensity[0] *= bassCurve;
-							// emissionData.bandIntensity[1] *= lowCurve;
-							// emissionData.bandIntensity[2] *= highCurve;
-							// emissionData.bandIntensity[3] *= trebleCurve;
+							emissionData.bandIntensity[0] *= bassCurve;
+							emissionData.bandIntensity[1] *= lowCurve;
+							emissionData.bandIntensity[2] *= highCurve;
+							emissionData.bandIntensity[3] *= trebleCurve;
 							emissionData.intensity = ( emissionData.bandIntensity[0] + emissionData.bandIntensity[1] + emissionData.bandIntensity[2] + emissionData.bandIntensity[3]);
 						} else {
 							emissionData.intensity *= AudioLinkData(float2(delay, emissionData.intensityBand)) * poiMods.audioLinkAvailable;
@@ -25698,6 +25703,10 @@ Shader ".poiyomi/User Modules/token"
 							float2 uv_bandMap = poiMesh.uv[0].xy * _TokenEmission0BandColorMap_ST.xy + _TokenEmission0BandColorMap_ST.zw;
 							bandMap = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0BandColorMap, _MainTex, uv_bandMap);
 							#endif
+							
+							float bandMapScalar = 1.0 / (bandMap.r + bandMap.g + bandMap.b + (1.0 - bandMap.a));
+							bandMap *= bandMapScalar;
+							
 							emissionData.bandColor[0] = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass) * bandMap.r;
 							emissionData.bandColor[1] = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow) * bandMap.g;
 							emissionData.bandColor[2] = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh) * bandMap.b;
@@ -25803,12 +25812,12 @@ Shader ".poiyomi/User Modules/token"
 							
 							float trebleCurve = 0;
 							#if defined(PROP_TOKENEMISSION0BANDINTENSITYCURVETREBLE) || !defined(OPTIMIZER_ENABLED)
-							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.a, 1));
+							trebleCurve = tokenSample(_TokenEmission0BandIntensityCurveTreble, float2(audioLinkBandData.w, 1));
 							#endif
-							// emissionData.bandIntensity[0] *= bassCurve;
-							// emissionData.bandIntensity[1] *= lowCurve;
-							// emissionData.bandIntensity[2] *= highCurve;
-							// emissionData.bandIntensity[3] *= trebleCurve;
+							emissionData.bandIntensity[0] *= bassCurve;
+							emissionData.bandIntensity[1] *= lowCurve;
+							emissionData.bandIntensity[2] *= highCurve;
+							emissionData.bandIntensity[3] *= trebleCurve;
 							emissionData.intensity = ( emissionData.bandIntensity[0] + emissionData.bandIntensity[1] + emissionData.bandIntensity[2] + emissionData.bandIntensity[3]);
 						} else {
 							emissionData.intensity *= AudioLinkData(float2(delay, emissionData.intensityBand)) * poiMods.audioLinkAvailable;

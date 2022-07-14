@@ -122,7 +122,9 @@ _TokenEmission0IntensityCurveMap("Intensity Curve Map--{ reference_properties:[_
 
 [HideInInspector] g_end_tokenEMission0IntensityCurveOptions("", Float) = 0
 
-// AudioLink
+/*
+	Emission 0 - Intensity AudioLink Map
+*/
 [HideInInspector] g_start_tokenEmission0IntensityAudioLinkSettings("--{condition_showS:(_TokenEmission0IntensitySource==2)}", Float) = 0
 
 [Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBandIntensity ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
@@ -132,11 +134,6 @@ _TokenEmission0IntensityCurveMap("Intensity Curve Map--{ reference_properties:[_
 _TokenEmission0BandIntensityMap ("Band Map--{reference_properties:[_TokenEmission0BandIntensityMapPan, _TokenEmission0BandIntensityMapUV]}", 2D) = "white" {}
 [HideInInspector][Vector2]_TokenEmission0BandIntensityMapPan ("Panning", Vector) = (0, 0, 0, 0)
 [HideInInspector][ThryWideEnum(UV0, 0, UV1, 1, UV2, 2, UV3, 3, Panosphere, 4, World Pos XZ, 5, Polar UV, 6, Distorted UV, 7)] _TokenEmission0BandIntensityMapUV ("UV", Int) = 0
-
-// _TokenEmission0BandIntensityBass ("Bass Intensity", Range(0,1)) = 1
-// _TokenEmission0BandIntensityLow ("Low Intensity", Range(0,1)) = 1
-// _TokenEmission0BandIntensityHigh ("High Intensity", Range(0,1)) = 1
-// _TokenEmission0BandIntensityTreble ("Treble Intensity", Range(0,1)) = 1
 
 [Curve]_TokenEmission0BandIntensityCurveBass ("Bass Intensity--{reference_properties:[_TokenEmission0BandIntensityCurveBassPan, _TokenEmission0BandIntensityCurveBassUV]}", 2D) = "white" {}
 [HideInInspector][Vector2]_TokenEmission0BandIntensityCurveBassPan ("Panning", Vector) = (0, 0, 0, 0)
@@ -451,6 +448,10 @@ struct TokenEmissionData {
 						float2 uv_bandMap = poiMesh.uv[0].xy * _TokenEmission0BandColorMap_ST.xy + _TokenEmission0BandColorMap_ST.zw;
 						bandMap = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0BandColorMap, _MainTex, uv_bandMap);
 					#endif
+
+					float bandMapScalar = 1.0 / (bandMap.r + bandMap.g + bandMap.b + (1.0 - bandMap.a));
+					bandMap *= bandMapScalar;
+
 					emissionData.bandColor[0] = poiThemeColor(poiMods, _TokenEmission0BandColorBass.rgb, _TokenEmission0BandColorThemeIndexBass) * bandMap.r;
 					emissionData.bandColor[1] = poiThemeColor(poiMods, _TokenEmission0BandColorLow.rgb, _TokenEmission0BandColorThemeIndexLow) * bandMap.g;
 					emissionData.bandColor[2] = poiThemeColor(poiMods, _TokenEmission0BandColorHigh.rgb, _TokenEmission0BandColorThemeIndexHigh) * bandMap.b;
@@ -486,22 +487,11 @@ struct TokenEmissionData {
 						bandMap = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0BandIntensityMap, _MainTex, uv_bandMap);
 					#endif
 
-					
-
 					emissionData.bandIntensity[0] = bandMap.r * _TokenEmission0IntensityMultiplier;
 					emissionData.bandIntensity[1] = bandMap.g * _TokenEmission0IntensityMultiplier;
 					emissionData.bandIntensity[2] = bandMap.b * _TokenEmission0IntensityMultiplier;
 					emissionData.bandIntensity[3] = (1.0 - bandMap.a) * _TokenEmission0IntensityMultiplier;
 
-					// emissionData.bandIntensity[0] = _TokenEmission0BandIntensityBass * bassCurve * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[1] = _TokenEmission0BandIntensityLow * lowCurve * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[2] = _TokenEmission0BandIntensityHigh * highCurve * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[3] = _TokenEmission0BandIntensityTreble * trebleCurve * _TokenEmission0IntensityMultiplier;
-
-					// emissionData.bandIntensity[0] = _TokenEmission0BandIntensityBass * bandMap.r * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[1] = _TokenEmission0BandIntensityLow * bandMap.g * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[2] = _TokenEmission0BandIntensityHigh * bandMap.b * _TokenEmission0IntensityMultiplier;
-					// emissionData.bandIntensity[3] = _TokenEmission0BandIntensityTreble * (1.0 - bandMap.a) * _TokenEmission0IntensityMultiplier;
 				} else {
 					emissionData.intensity = _TokenEmission0Intensity;
 					emissionData.intensityBand = _TokenEmission0ALBandIntensity;
