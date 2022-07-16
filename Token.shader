@@ -1879,7 +1879,8 @@ Shader ".poiyomi/User Modules/token"
 		{value:2,actions:[{type:SET_PROPERTY,data:_TokenEmission0ColorSource=2}]}
 		]}", Int) = 0 // AudioLink enabled
 		
-		[HideInInspector]_TokenEmission0ColorSource("Selected Color Source", Int) = 0
+		[Helpbox(1)] _TokenEmission0ColorHelp("The following property is set by the selection above, the only time you should need to change this is for animations", Float) = 0
+		_TokenEmission0ColorSource("Selected Color Source", Int) = 0
 		
 		// color gradient
 		[HideInInspector] g_start_tokenEmission0ColorGradientOptions ("--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0ColorSource==1}}", Float) = 0
@@ -1929,19 +1930,20 @@ Shader ".poiyomi/User Modules/token"
 		Emission 0 - Intensity Source
 		*/
 		[HideInInspector] m_start_tokenEmission0IntensitySource("Intensity Source", Float) = 0
+		
 		_TokenEmission0IntensityMultiplier("Multiplier", Range(0, 5)) = 1
 		// source selection
-		[Enum(User Defined, 0, Curve, 1)]_TokenEmission0IntensitySourceNoAL ("Color Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==0},on_value_actions:[
+		[ThryWideEnum(User Defined, 0, Curve, 1)]_TokenEmission0IntensitySourceNoAL ("Intensity Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==0},on_value_actions:[
 		{value:0,actions:[{type:SET_PROPERTY,data:_TokenEmission0IntensitySource=1}]},
 		{value:1,actions:[{type:SET_PROPERTY,data:_TokenEmission0IntensitySource=0}]}
 		]}", Int) = 0 // AudioLink disabled
-		[Enum(User Defined, 0, Curve, 1, AudioLink, 2)]_TokenEmission0IntensitySourceAL ("Color Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==1},on_value_actions:[
+		[ThryWideEnum(User Defined, 0, Curve, 1, AudioLink, 2)]_TokenEmission0IntensitySourceAL ("Intensity Source--{condition_show:{type:PROPERTY_BOOL,data:_TokenEmission0AudioLinkEnabled==1},on_value_actions:[
 		{value:0,actions:[{type:SET_PROPERTY,data:_TokenEmission0IntensitySource=0}]},
 		{value:1,actions:[{type:SET_PROPERTY,data:_TokenEmission0IntensitySource=1}]},
 		{value:2,actions:[{type:SET_PROPERTY,data:_TokenEmission0IntensitySource=2}]}
 		]}", Int) = 0 // AudioLink enabled
-		
-		[HideInInspector]_TokenEmission0IntensitySource("Selected Intensity Source", Int) = 0
+		[Helpbox(1)] _TokenEmission0IntensityHelp("The following property is set by the selection above, the only time you should need to change this is for animations", Float) = 0
+		_TokenEmission0IntensitySource("Selected Intensity Source", Float) = 0
 		
 		/*
 		Emission 0 - Intensity Curve
@@ -1965,7 +1967,7 @@ Shader ".poiyomi/User Modules/token"
 		
 		[Enum(Bass,0,Low,1,High,2,Treble,3,Map,4)]_TokenEmission0ALBandIntensity ("AudioLink Band--{ condition_showS:_TokenEmission0AudioLinkEnabled==1}", Int) = 0
 		
-		[HideInInspector] g_start_TokenEmission0ALBandIntensityCurve ("--{condition_showS:(_TokenEmission0AudioLinkEnabled==1 && _TokenEmission0ALBandIntensity==4)}", Float) = 0
+		[HideInInspector] g_start_TokenEmission0ALBandIntensityCurve ("--{condition_showS:(_TokenEmission0AudioLinkEnabled==1 && _TokenEmission0ALBandIntensity==4 && _TokenEmission0IntensitySource==2)}", Float) = 0
 		
 		_TokenEmission0BandIntensityMap ("Band Map--{reference_properties:[_TokenEmission0BandIntensityMapPan, _TokenEmission0BandIntensityMapUV]}", 2D) = "white" {}
 		[HideInInspector][Vector2]_TokenEmission0BandIntensityMapPan ("Panning", Vector) = (0, 0, 0, 0)
@@ -11136,8 +11138,9 @@ Shader ".poiyomi/User Modules/token"
 					{
 						float gradientPos = 0;
 						#if defined(PROP_TOKENEMISSION0COLORGRADIENTMAP) || !defined(OPTIMIZER_ENABLED)
-						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST;
-						float2 uv_gradientMap = poiMesh.uv[0].xy;
+						float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST.zw;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy;
 						gradientPos = tokenSample(_TokenEmission0ColorGradientMap, uv_gradientMap);
 						#endif
 						
@@ -11219,12 +11222,12 @@ Shader ".poiyomi/User Modules/token"
 						float mapWeight = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVEMAP) || !defined(OPTIMIZER_ENABLED)
 						float2 uv_map = poiMesh.uv[0].xy * _TokenEmission0IntensityCurveMap_ST.xy + _TokenEmission0IntensityCurveMap_ST.zw;
-						mapWeight = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurveMap, _MainTex, uv_map);
+						mapWeight = tokenSample(_TokenEmission0IntensityCurveMap, uv_map);
 						#endif
 						
 						float curveValue = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVE) || !defined(OPTIMIZER_ENABLED)
-						curveValue = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurve, _MainTex, float2(mapWeight, mapWeight));
+						curveValue = tokenSample(_TokenEmission0IntensityCurve, float2(mapWeight, mapWeight));
 						#endif
 						
 						emissionData.intensity *= curveValue;
@@ -20537,8 +20540,9 @@ Shader ".poiyomi/User Modules/token"
 					{
 						float gradientPos = 0;
 						#if defined(PROP_TOKENEMISSION0COLORGRADIENTMAP) || !defined(OPTIMIZER_ENABLED)
-						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST;
-						float2 uv_gradientMap = poiMesh.uv[0].xy;
+						float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST.zw;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy;
 						gradientPos = tokenSample(_TokenEmission0ColorGradientMap, uv_gradientMap);
 						#endif
 						
@@ -20620,12 +20624,12 @@ Shader ".poiyomi/User Modules/token"
 						float mapWeight = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVEMAP) || !defined(OPTIMIZER_ENABLED)
 						float2 uv_map = poiMesh.uv[0].xy * _TokenEmission0IntensityCurveMap_ST.xy + _TokenEmission0IntensityCurveMap_ST.zw;
-						mapWeight = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurveMap, _MainTex, uv_map);
+						mapWeight = tokenSample(_TokenEmission0IntensityCurveMap, uv_map);
 						#endif
 						
 						float curveValue = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVE) || !defined(OPTIMIZER_ENABLED)
-						curveValue = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurve, _MainTex, float2(mapWeight, mapWeight));
+						curveValue = tokenSample(_TokenEmission0IntensityCurve, float2(mapWeight, mapWeight));
 						#endif
 						
 						emissionData.intensity *= curveValue;
@@ -25623,8 +25627,9 @@ Shader ".poiyomi/User Modules/token"
 					{
 						float gradientPos = 0;
 						#if defined(PROP_TOKENEMISSION0COLORGRADIENTMAP) || !defined(OPTIMIZER_ENABLED)
-						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST;
-						float2 uv_gradientMap = poiMesh.uv[0].xy;
+						float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy + _TokenEmission0ColorGradientMap_ST.zw;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy * _TokenEmission0ColorGradientMap_ST.xy;
+						// float2 uv_gradientMap = poiMesh.uv[0].xy;
 						gradientPos = tokenSample(_TokenEmission0ColorGradientMap, uv_gradientMap);
 						#endif
 						
@@ -25706,12 +25711,12 @@ Shader ".poiyomi/User Modules/token"
 						float mapWeight = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVEMAP) || !defined(OPTIMIZER_ENABLED)
 						float2 uv_map = poiMesh.uv[0].xy * _TokenEmission0IntensityCurveMap_ST.xy + _TokenEmission0IntensityCurveMap_ST.zw;
-						mapWeight = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurveMap, _MainTex, uv_map);
+						mapWeight = tokenSample(_TokenEmission0IntensityCurveMap, uv_map);
 						#endif
 						
 						float curveValue = 1;
 						#if defined(PROP_TOKENEMISSION0INTENSITYCURVE) || !defined(OPTIMIZER_ENABLED)
-						curveValue = UNITY_SAMPLE_TEX2D_SAMPLER(_TokenEmission0IntensityCurve, _MainTex, float2(mapWeight, mapWeight));
+						curveValue = tokenSample(_TokenEmission0IntensityCurve, float2(mapWeight, mapWeight));
 						#endif
 						
 						emissionData.intensity *= curveValue;
